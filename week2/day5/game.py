@@ -18,7 +18,15 @@ class Game:
         return items[rand]
 
     def get_game_result(self, user_item, computer_item):
-        return 'draw'
+        """Get the game results, comparing the two items."""
+        if user_item == computer_item:
+            return 'draw'
+        elif ((user_item == 'r' and computer_item == 's')
+              or (user_item == 'p' and computer_item == 'r')
+              or (user_item == 's' and computer_item == 'p')):
+            return 'win'
+        else:
+            return 'loss'
 
     def play(self):
         user_item = self.get_user_item()
