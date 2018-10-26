@@ -1,4 +1,5 @@
 import json
+import os.path as path
 
 WORD_LIST_PATH = '../sowpods.txt'
 LAST_SEARCH_PATH = 'last_search.json'
@@ -49,17 +50,19 @@ def show_menu():
                 print("You must enter one or more "
                       "alphabetic characters.")
             else:
-                matches = search(search_text)
+                results = search(search_text)
                 # Store it in last_search
                 last_search['search_text'] = search_text
-                last_search['matches'] = matches
-                show_results(search_text, matches)
+                last_search['results'] = results
+                # Save it to the JSON file
+                save_search(search_text, results)
+                show_results(search_text, results)
         elif choice == 'r':
             if last_search == {}:
                 print("No search results yet.")
             else:
                 show_results(last_search['search_text'],
-                             last_search['matches'])
+                             last_search['results'])
         choice = input(menu).strip().lower()
 
 
@@ -73,17 +76,10 @@ def show_results(search_text, matches):
             print(f" {i + 1:3}. {match}")
 
 
-def test():
-    text = input("Text to search for: ")
-    matches = search(text)
-    print("Matches: ")
-    print("\n".join(matches))
-    save_search(text, matches)
-
-def test2():
-    text = 'yair'
-    matches = search(text)
-    show_results(text, matches)
-
-#test2()
+# First, check if the LAST_SEARCH_PATH file exists.
+if path.exists(LAST_SEARCH_PATH):
+    # Load it with json, and store it in the last_search variable
+    with open(LAST_SEARCH_PATH) as f:
+        last_search = json.load(f)
+# Show the menu, even if the file does not exist.
 show_menu()
