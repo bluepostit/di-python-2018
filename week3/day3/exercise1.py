@@ -33,11 +33,55 @@ def save_search(text, results):
         json.dump(search_as_dict, f, indent=4)
 
 
+def get_shortest_word(word_list):
+    shortest = None
+    shortest_length = 100
+    for word in word_list:
+        word_length = len(word)
+        if word_length < shortest_length:
+            shortest = word
+            shortest_length = word_length
+    return shortest
+
+
+def get_longest_word(word_list):
+    longest = None
+    longest_length = 1
+    for word in word_list:
+        word_length = len(word)
+        if word_length > longest_length:
+            longest = word
+            longest_length = word_length
+    return longest
+
+
+def get_average_word_length(word_list):
+    lengths = [len(word) for word in word_list]
+    total = sum(lengths)
+    average = total / len(word_list)
+    return average
+
+
+def show_statistics():
+    words = read_word_list()
+
+    shortest = get_shortest_word(words)
+    longest = get_longest_word(words)
+    average = get_average_word_length(words)
+
+    print("\tINFORMATION")
+    print(f"There are {len(words)} words in the list")
+    print(f"The shortest word is '{shortest}' ({len(shortest)})")
+    print(f"The longest word is '{longest}' ({len(longest)})")
+    print(f"Average word length is {average:2.2} characters")
+
+
 def show_menu():
     menu = """
     MENU
  (s) Search for words
  (r) View last search results
+ (i) Information about the word list
  (x) Exit
   : """
     choice = input(menu).strip().lower()
@@ -63,6 +107,8 @@ def show_menu():
             else:
                 show_results(last_search['search_text'],
                              last_search['results'])
+        elif choice == 'i':
+            show_statistics()
         choice = input(menu).strip().lower()
 
 
